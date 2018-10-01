@@ -4,7 +4,7 @@
 #include "servers/audio_server.h"
 #include "servers/audio/audio_stream.h"
 #include "oaml.h"
-#include "reference.h"
+#include "core/reference.h"
 
 
 class oamlGodotModule : public Reference {
@@ -32,8 +32,12 @@ public:
 	~oamlGodotModule();
 
 	void AddTension(int value);
+	void ClearConditions();
 	void EnableDynamicCompressor(bool enable = true, double thresholdDb = -3.0, double ratio = 4.0);
+	float GetLayerGain(String layer);
+	int GetLayerRandomChance(String layer);
 	String GetPlayingInfo();
+	int GetTension();
 	String GetVersion();
 	float GetVolume();
 	void Init(String defsFilename);
@@ -41,6 +45,7 @@ public:
 	bool IsPaused();
 	bool IsPlaying();
 	bool IsTrackPlaying(String name);
+	void LoadState(String state);
 	void LoadTrack(String name);
 	float LoadTrackProgress(String name);
 	void Pause();
@@ -57,7 +62,6 @@ public:
 	void SetVolume(float vol);
 	void StopPlaying();
 	String SaveState();
-	void LoadState(String state);
 };
 
 #endif

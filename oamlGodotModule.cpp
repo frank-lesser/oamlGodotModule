@@ -1,5 +1,5 @@
 #include "core/io/config_file.h"
-#include "os/file_access.h"
+#include "core/os/file_access.h"
 
 #include "oamlGodotModule.h"
 
@@ -50,6 +50,13 @@ void oamlGodotModule::AddTension(int value) {
 	oaml->AddTension(value);
 }
 
+void oamlGodotModule::ClearConditions() {
+	if (oaml == NULL)
+		return;
+
+	oaml->ClearConditions();
+}
+
 void oamlGodotModule::EnableDynamicCompressor(bool enable, double thresholdDb, double ratio) {
 	if (oaml == NULL)
 		return;
@@ -57,11 +64,32 @@ void oamlGodotModule::EnableDynamicCompressor(bool enable, double thresholdDb, d
 	oaml->EnableDynamicCompressor(enable, thresholdDb, ratio);
 }
 
+float oamlGodotModule::GetLayerGain(String layer) {
+	if (oaml == NULL)
+		return 0.f;
+
+	return oaml->GetLayerGain(layer.utf8().get_data());
+}
+
+int oamlGodotModule::GetLayerRandomChance(String layer) {
+	if (oaml == NULL)
+		return 0;
+
+	return oaml->GetLayerRandomChance(layer.utf8().get_data());
+}
+
 String oamlGodotModule::GetPlayingInfo() {
 	if (oaml == NULL)
 		return "";
 
 	return String(oaml->GetPlayingInfo());
+}
+
+int oamlGodotModule::GetTension() {
+	if (oaml == NULL)
+		return 0;
+
+	return oaml->GetTension();
 }
 
 String oamlGodotModule::GetVersion() {
@@ -234,8 +262,12 @@ void oamlGodotModule::LoadState(String state) {
 
 void oamlGodotModule::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_tension", "value"), &oamlGodotModule::AddTension);
+	ClassDB::bind_method(D_METHOD("clear_conditions"), &oamlGodotModule::ClearConditions);
 	ClassDB::bind_method(D_METHOD("enable_dynamic_compressor", "enable", "thresholdDb", "ratio"), &oamlGodotModule::EnableDynamicCompressor, true, -3.0, 4.0);
+	ClassDB::bind_method(D_METHOD("get_layer_gain", "layer"), &oamlGodotModule::GetLayerGain);
+	ClassDB::bind_method(D_METHOD("get_layer_random_chance", "layer"), &oamlGodotModule::GetLayerRandomChance);
 	ClassDB::bind_method(D_METHOD("get_playing_info"), &oamlGodotModule::GetPlayingInfo);
+	ClassDB::bind_method(D_METHOD("get_tension"), &oamlGodotModule::GetTension);
 	ClassDB::bind_method(D_METHOD("get_version"), &oamlGodotModule::GetVersion);
 	ClassDB::bind_method(D_METHOD("get_volume"), &oamlGodotModule::GetVolume);
 	ClassDB::bind_method(D_METHOD("init", "defsFilename"), &oamlGodotModule::Init);
